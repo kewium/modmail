@@ -45,8 +45,12 @@ func main() {
 		panic("MONGO_URI is missing")
 	}
 
-	data, err := database.NewDatabase(mongoUri)
+	data, err := database.NewDatabase(ctx, mongoUri)
 	if err != nil {
+		// Told to stop while still connecting: just exit.
+		if ctx.Err() != nil {
+			return
+		}
 		panic(err)
 	}
 
